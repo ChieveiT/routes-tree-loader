@@ -1,8 +1,8 @@
 {
   "name": "routes-tree-loader",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Convert routes tree to a routes module.",
-  "main": "routes-loader.js",
+  "main": "src/routes-loader.js",
   "directories": {
     "test": "test"
   },
