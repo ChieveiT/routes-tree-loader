@@ -1,0 +1,10 @@
+{
+  "presets": [
+    "babel-preset-es2015",
+    "babel-preset-react",
+    "stage-3"
+  ],
+  "plugins": [
+    "transform-flow-strip-types"
+  ]
+}
