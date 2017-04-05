@@ -47,19 +47,22 @@ module.exports = {
             if (regex.lastIndex === remain.length) {
               let _node = node;
 
-              while (_node.children) {
+              while (_node && _node.children) {
+                let _default = null;
+
                 for (let i in _node.children) {
                   if (_node.children[i]._path === undefined) {
-                    let _default = _node.children[i];
+                    _default = _node.children[i];
 
                     if (_default._components) {
                       componentsPromises.push(_default._components());
                     }
 
-                    _node = _default;
                     break;
                   }
                 }
+
+                _node = _default;
               }
 
               return [
