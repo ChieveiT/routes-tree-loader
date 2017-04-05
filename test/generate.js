@@ -68,6 +68,11 @@ children:
     children: 
       - path: '<?foo:\\w+_>bar'
         components: '../stub/bar'
+  - path: no_default_child
+    children:
+      - children:
+        - path: child1
+      - path: child2
 `;
 source = beautify(routeLoader(yamlLoader(routeTree)));
 fs.writeFileSync('test/routes/match_function.js', source);

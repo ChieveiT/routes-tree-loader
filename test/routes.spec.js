@@ -133,4 +133,15 @@ describe('Routes generated from Routes Loader', () => {
       '/foo/bar?banana%26=123%3D321'
     );
   });
+
+  it('fix the end condition in matching, should not ' +
+    'match "a path with no default tail"', () => {
+    let routes = require('./routes/match_function');
+
+    expect(routes.check('/no_default_child')).toEqual(false);
+
+    return routes.match('/no_default_child').then(function(result) {
+      expect(result).toEqual(false);
+    })
+  });
 });

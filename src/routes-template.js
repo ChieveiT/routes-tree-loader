@@ -42,12 +42,13 @@ module.exports = {
               }
             }
 
-            // if match has reached tail
-            // search for default routes on the subtree
+            // match has reached tail
             if (regex.lastIndex === remain.length) {
               let _node = node;
 
-              while (_node && _node.children) {
+              // if having children
+              // search for default routes on the subtree
+              while (_node.children) {
                 let _default = null;
 
                 for (let i in _node.children) {
@@ -58,11 +59,16 @@ module.exports = {
                       componentsPromises.push(_default._components());
                     }
 
+                    _node = _default;
                     break;
                   }
                 }
 
-                _node = _default;
+                // if a default child can't be found
+                // match will be fail.
+                // "A path with no default tail" is not
+                // routable, you can not match it.
+                if (!_default) return false;
               }
 
               return [
@@ -153,6 +159,22 @@ module.exports = {
       if (node._path) {
         if (regex.exec(remain)) {
           if (regex.lastIndex === remain.length) {
+            let _node = node;
+
+            while (_node.children) {
+              let _default = null;
+
+              for (let i in _node.children) {
+                if (_node.children[i]._path === undefined) {
+                  _default = _node.children[i];
+                  _node = _default;
+                  break;
+                }
+              }
+
+              if (!_default) return false;
+            }
+
             return true;
           }
         }
