@@ -216,7 +216,7 @@ module.exports = {
         throw new Error('Argument \'' + i + '\' is illegal');
       }
 
-      result = result.replace('<' + i + '>', args[i] || '');
+      result = result.replace('<' + i + '>', String(args[i]) || '');
     }
 
     // search stringify
