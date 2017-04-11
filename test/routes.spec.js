@@ -99,8 +99,8 @@ describe('Routes generated from Routes Loader', () => {
   it('exports linkByName function to return a named route\'s link', () => {
     let routes = require('./routes/link_function');
 
-    expect(routes.linkByName('foo', { bar: 1, foo: 'abc' })).toEqual(
-      '/foo1/bar.fooabc_tail_'
+    expect(routes.linkByName('foo', { bar: 0, foo: 'abc' })).toEqual(
+      '/foo0/bar.fooabc_tail_'
     );
 
     expect(routes.linkByName('foo', {
