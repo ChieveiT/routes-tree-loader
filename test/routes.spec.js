@@ -4,10 +4,10 @@ import bar from './stub/bar';
 
 describe('Routes generated from Routes Loader', () => {
   it('exports match function to match routes', () => {
-    let routes = require('./routes/match_function');
+    let { match } = require('./routes/match_function');
 
     return Promise.all([
-      routes.match('/').then(function({ components, args, name }) {
+      match('/').then(function({ components, args, name }) {
         expect(components).toEqual([
           [ foo ],
           [ foo, bar ],
@@ -18,7 +18,7 @@ describe('Routes generated from Routes Loader', () => {
 
         expect(name).toEqual('default');
       }),
-      routes.match('/default_child_one').then(function({
+      match('/default_child_one').then(function({
         components, args, name
       }) {
         expect(components).toEqual([
@@ -31,7 +31,7 @@ describe('Routes generated from Routes Loader', () => {
 
         expect(name).toEqual('default1');
       }),
-      routes.match('/default_child_two').then(function({
+      match('/default_child_two').then(function({
         components, args, name
       }) {
         expect(components).toEqual([
@@ -44,7 +44,7 @@ describe('Routes generated from Routes Loader', () => {
 
         expect(name).toEqual('default2');
       }),
-      routes.match('/foo').then(function({ components, args, name }) {
+      match('/foo').then(function({ components, args, name }) {
         expect(components).toEqual([
           [ foo ]
         ]);
@@ -53,7 +53,7 @@ describe('Routes generated from Routes Loader', () => {
 
         expect(name).toEqual(undefined);
       }),
-      routes.match('/foo123abc_bar').then(function({
+      match('/foo123abc_bar').then(function({
         components, args, name
       }) {
         expect(components).toEqual([
@@ -65,7 +65,7 @@ describe('Routes generated from Routes Loader', () => {
 
         expect(name).toEqual(undefined);
       }),
-      routes.match('/foo123bar?banana%26=123%3D321').then(function({
+      match('/foo123bar?banana%26=123%3D321').then(function({
         components, args, name
       }) {
         expect(components).toEqual([
@@ -77,70 +77,70 @@ describe('Routes generated from Routes Loader', () => {
 
         expect(name).toEqual(undefined);
       }),
-      routes.match('/foobar').then(function(r) {
+      match('/foobar').then(function(r) {
         expect(r).toEqual(false);
       })
     ]);
   });
 
   it('exports check function to check routes', () => {
-    let routes = require('./routes/match_function');
+    let { check } = require('./routes/match_function');
 
-    expect(routes.check('/')).toEqual(true);
-    expect(routes.check('/default_child_one')).toEqual(true);
-    expect(routes.check('/default_child_two')).toEqual(true);
-    expect(routes.check('/foo')).toEqual(true);
-    expect(routes.check('/foo123abc_bar')).toEqual(true);
-    expect(routes.check('/foo123bar')).toEqual(true);
-    expect(routes.check('/foobar')).toEqual(false);
-    expect(routes.check('/not_found')).toEqual(false);
+    expect(check('/')).toEqual(true);
+    expect(check('/default_child_one')).toEqual(true);
+    expect(check('/default_child_two')).toEqual(true);
+    expect(check('/foo')).toEqual(true);
+    expect(check('/foo123abc_bar')).toEqual(true);
+    expect(check('/foo123bar')).toEqual(true);
+    expect(check('/foobar')).toEqual(false);
+    expect(check('/not_found')).toEqual(false);
   });
 
   it('exports linkByName function to return a named route\'s link', () => {
-    let routes = require('./routes/link_function');
+    let { linkByName } = require('./routes/link_function');
 
-    expect(routes.linkByName('foo', { bar: 0, foo: 'abc' })).toEqual(
+    expect(linkByName('foo', { bar: 0, foo: 'abc' })).toEqual(
       '/foo0/bar.fooabc_tail_'
     );
 
-    expect(routes.linkByName('foo', {
+    expect(linkByName('foo', {
       foo: 'abc', 'banana&': '123=321'
     })).toEqual(
       '/foo/bar.fooabc_tail_?banana%26=123%3D321'
     );
 
     expect(() => {
-      routes.linkByName('name');
+      linkByName('name');
     }).toThrow(/Unknown name.*/);
 
     expect(() => {
-      routes.linkByName('foo');
+      linkByName('foo');
     }).toThrow(/Argument.*required/);
 
     expect(() => {
-      routes.linkByName('foo', { foo: 233 });
+      linkByName('foo', { foo: 233 });
     }).toThrow(/Argument.*illegal/);
   });
 
   it('exports linkByPath function to return a path\'s link', () => {
-    let routes = require('./routes/link_function');
+    let { linkByPath } = require('./routes/link_function');
 
-    expect(routes.linkByPath('/foo/bar', { bar: 1, foo: 'abc' })).toEqual(
+    expect(linkByPath('/foo/bar', { bar: 1, foo: 'abc' })).toEqual(
       '/foo/bar?bar=1&foo=abc'
     );
 
-    expect(routes.linkByPath('/foo/bar', { 'banana&': '123=321' })).toEqual(
+    expect(linkByPath('/foo/bar', { 'banana&': '123=321' })).toEqual(
       '/foo/bar?banana%26=123%3D321'
     );
   });
 
   it('fix the end condition in matching, should not ' +
     'match "a path with no default tail"', () => {
-    let routes = require('./routes/match_function');
+    let { check, match } = require('./routes/match_function');
 
-    expect(routes.check('/no_default_child')).toEqual(false);
+    expect(check('/no_default_child')).toEqual(false);
 
-    return routes.match('/no_default_child').then(function(result) {
+    return match('/no_default_child').then(function(result) {
       expect(result).toEqual(false);
     })
   });

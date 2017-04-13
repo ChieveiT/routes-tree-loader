@@ -227,5 +227,14 @@ module.exports = function(source) {
     }
   );
 
-  return 'module.exports = ' + routeSource;
+  return `
+    var routes = ${routeSource};
+
+    routes.match = routes.match.bind(routes);
+    routes.check = routes.check.bind(routes);
+    routes.linkByPath = routes.linkByPath.bind(routes);
+    routes.linkByName = routes.linkByName.bind(routes);
+
+    module.exports = routes;
+  `;
 };
